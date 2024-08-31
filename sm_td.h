@@ -20,6 +20,9 @@
 #pragma once
 
 #include QMK_KEYBOARD_H
+#ifdef QMK_USER_H
+#    include QMK_USER_H
+#endif
 #include "deferred_exec.h"
 
 #ifdef SMTD_DEBUG_ENABLED

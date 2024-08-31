@@ -62,9 +62,12 @@ Please see the [wiki](https://github.com/stasmarkin/sm_td/wiki) for extensive do
 See [upgrade instructions](https://github.com/stasmarkin/sm_td/wiki/1.1:-Upgrade-instructions) if already using sm_td library.
 
 ## Installation
-1. Add `DEFERRED_EXEC_ENABLE = yes` to your `rules.mk` file.
+
+### Installation per Keyboard
+
+1. Add `DEFERRED_EXEC_ENABLE = yes` and `SRC += "sm_td.c"` to your `rules.mk` file.
 2. Add `#define MAX_DEFERRED_EXECUTORS 10` (or add 10 if you already use it) to your `config.h` file.
-3. Clone the `sm_td.h` repository into your `keymaps/your_keymap` folder (next to your `keymap.c`)
+3. Add `sm_td.h` and `sm_td.c` into your `keymaps/your_keymap` folder (next to your `keymap.c`)
 4. Add `#include "sm_td.h"` to your `keymap.c` file.
 5. Check `!process_smtd` first in your `process_record_user` function like this
    ```c
@@ -96,7 +99,7 @@ See [upgrade instructions](https://github.com/stasmarkin/sm_td/wiki/1.1:-Upgrade
 8. Create a `void on_smtd_action(uint16_t keycode, smtd_action action, uint8_t tap_count)` function that would handle all the actions of the custom keycodes you defined in the previous step.
    For example, if you want to use `CKC_A`, `CKC_S`, `CKC_D` and `CKC_F` for HRM, your `on_smtd_action()` function will look like this
    ```c
-   void on_smtd_action(uint16_t keycode, smtd_action action, uint8_t tap_count) { }
+   void on_smtd_action(uint16_t keycode, smtd_action action, uint8_t tap_count) {
        switch (keycode) {
            SMTD_MT(CKC_A, KC_A, KC_LEFT_GUI)
            SMTD_MT(CKC_S, KC_S, KC_LEFT_ALT)
@@ -110,6 +113,31 @@ See [upgrade instructions](https://github.com/stasmarkin/sm_td/wiki/1.1:-Upgrade
 9. (optional) Add global configuration parameters to your `config.h` file (see [timeouts](https://github.com/stasmarkin/sm_td/wiki/2.2:-Customization-guide:-Timeouts-per-key) and [feature flags](https://github.com/stasmarkin/sm_td/wiki/2.3:-Customization-guide:-Feature-flags)).
 10. (optional) Add per-key configuration (see [timeouts](https://github.com/stasmarkin/sm_td/wiki/2.2:-Customization-guide:-Timeouts-per-key) and [feature flags](https://github.com/stasmarkin/sm_td/wiki/2.3:-Customization-guide:-Feature-flags))
 
+### Installation as a Userspace Library
+
+If you will be using the library across multiple keyboards, you might want to install `sm_td` as a userspace library.
+
+Follow the instructions for [Installation per Keyboard](#installation-per-keyboard) with the following exceptions/additions:
+
+1. Add `sm_td.h` and `sm_td.c` within a `sm_td` directory at the base of your userspace.
+  For example:
+  ```
+  qmk_userspace
+      └── users
+          └── your_user
+              ├── config.h
+              ├── your_user.h
+              ├── your_user.c
+              ├── rules.mk
+              └── sm_td
+                  ├── sm_td.c
+                  └── sm_td.h
+  ```
+  Note: as an alternative, add this project as a git submodule to your userspace
+    - from within `qmk_userspace/users/your_user` run `git submodule add https://github.com/stasmarkin/sm_td.git`
+2. Add `SRC += $(USER_PATH)/sm_td/sm_td.c` to your `rules.mk`
+3. Add an include directive to your userspace header file to `#include sm_td/sm_td.h`
+4. Add a define to your `config.h` to include all of your userspace headers within `sm_td`: `#define QMK_USER_H your_user`
 
 ## What is `on_smtd_action()` function?
 
