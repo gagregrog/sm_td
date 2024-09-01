@@ -274,8 +274,11 @@ bool process_smtd(uint16_t keycode, keyrecord_t *record);
 
 #define SMTD_GET_MACRO(_1, _2, _3, _4, _5, NAME, ...) NAME
 #define SMTD_MT(...) SMTD_GET_MACRO(__VA_ARGS__, SMTD_MT5, SMTD_MT4, SMTD_MT3)(__VA_ARGS__)
+#define SM_MT(KC_KEY, MOD) SMTD_MT(SM_##KC_KEY, KC_KEY, MOD)
 #define SMTD_MTE(...) SMTD_GET_MACRO(__VA_ARGS__, SMTD_MTE5, SMTD_MTE4, SMTD_MTE3)(__VA_ARGS__)
+#define SM_MTE(KC_KEY, MOD) SMTD_MTE(SM_##KC_KEY, KC_KEY, MOD)
 #define SMTD_LT(...) SMTD_GET_MACRO(__VA_ARGS__, SMTD_LT5, SMTD_LT4, SMTD_LT3)(__VA_ARGS__)
+#define SM_LT(KC_KEY, MOD) SMTD_LT(SM_##KC_KEY, KC_KEY, MOD)
 
 #define SMTD_MT3(macro_key, tap_key, mod) SMTD_MT4(macro_key, tap_key, mod, 1000)
 #define SMTD_MTE3(macro_key, tap_key, mod) SMTD_MTE4(macro_key, tap_key, mod, 1000)

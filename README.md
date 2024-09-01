@@ -84,10 +84,10 @@ See [upgrade instructions](https://github.com/stasmarkin/sm_td/wiki/1.1:-Upgrade
    ```c
    enum custom_keycodes {
        SMTD_KEYCODES_BEGIN = SAFE_RANGE,
-       CKC_A, // reads as C(ustom) + KC_A, but you may give any name here
-       CKC_S,
-       CKC_D,
-       CKC_F,
+       SM_KC_A, // reads as SM(_td) + KC_A -- you may give any name here, but SM_ prefix provides some conveniences
+       SM_KC_S,
+       SM_KC_D,
+       SM_KC_F,
        SMTD_KEYCODES_END,
    }
    ```
@@ -97,14 +97,16 @@ See [upgrade instructions](https://github.com/stasmarkin/sm_td/wiki/1.1:-Upgrade
 
 7. Place all your custom keycodes on the desired key positions in your `keymaps`.
 8. Create a `void on_smtd_action(uint16_t keycode, smtd_action action, uint8_t tap_count)` function that would handle all the actions of the custom keycodes you defined in the previous step.
-   For example, if you want to use `CKC_A`, `CKC_S`, `CKC_D` and `CKC_F` for HRM, your `on_smtd_action()` function will look like this
+   For example, if you want to use `SM_KC_A`, `SM_KC_S`, `SM_KC_D` and `SM_KC_F` for HRM, your `on_smtd_action()` function will look like this
    ```c
    void on_smtd_action(uint16_t keycode, smtd_action action, uint8_t tap_count) {
        switch (keycode) {
-           SMTD_MT(CKC_A, KC_A, KC_LEFT_GUI)
-           SMTD_MT(CKC_S, KC_S, KC_LEFT_ALT)
-           SMTD_MT(CKC_D, KC_D, KC_LEFT_CTRL)
-           SMTD_MT(CKC_F, KC_F, KC_LSFT)
+           SMTD_MT(SM_KC_A, KC_A, KC_LEFT_GUI)
+           SMTD_MT(SM_KC_S KC_S, KC_LEFT_ALT)
+           SMTD_MT(SM_KC_D, KC_D, KC_LEFT_CTRL)
+           // if the custom keycode is the sm_ prefixed kc_code,
+           // you can use the shorthand macros SM_MT, SM_MTE, SM_LT
+           SM_MT(KC_F, KC_LSFT)
        }
    }
    ```
