@@ -288,6 +288,13 @@ bool process_smtd(uint16_t keycode, keyrecord_t *record);
 #define SMTD_MTE4(macro_key, tap_key, mod, threshold) SMTD_MTE5(macro_key, tap_key, mod, threshold, true)
 #define SMTD_LT4(macro_key, tap_key, layer, threshold) SMTD_LT5(macro_key, tap_key, layer, threshold, true)
 
+#if defined(CAPS_WORD_ENABLE) && defined(BOTH_SHIFTS_TURNS_ON_CAPS_WORD)
+#    define HANDLE_SHIFT_ACTIVATED_CAPS_WORD(mod) \
+        if ((get_mods() & (MOD_LSFT | MOD_RSFT)) && (mod == KC_LSFT || mod == KC_RSFT)) caps_word_on();
+#else
+#    define HANDLE_SHIFT_ACTIVATED_CAPS_WORD(mod)
+#endif
+
 #define SMTD_MT5(macro_key, tap_key, mod, threshold, use_cl) \
     case macro_key: {                                        \
         switch (action) {                                    \
@@ -298,6 +305,7 @@ bool process_smtd(uint16_t keycode, keyrecord_t *record);
                 break;                                       \
             case SMTD_ACTION_HOLD:                           \
                 if (tap_count < threshold) {                 \
+                    HANDLE_SHIFT_ACTIVATED_CAPS_WORD(mod)    \
                     register_mods(MOD_BIT(mod));             \
                 } else {                                     \
                     SMTD_REGISTER_16(use_cl, tap_key);       \
