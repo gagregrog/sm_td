@@ -375,3 +375,4 @@ bool process_smtd(uint16_t keycode, keyrecord_t *record);
         }                                                      \
         break;                                                 \
     }
+
